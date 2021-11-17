@@ -15,7 +15,7 @@ import com.safetynet.safetynetalerts.api.repository.DataFileReader;
 public class DataFileReaderTest {
 
 	@Autowired
-	DataFileReader reader;
+	private DataFileReader reader;
 	
 	@Test
 	public void datasAreRetrievedFromJsonFile () throws IOException{
