@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.safetynet.safetynetalerts.api.service.PersonApiService;
@@ -86,5 +87,19 @@ public class PersonApiController {
 		log.info("DELETE request send with body: " + personToDelete);
 		log.info("Response for the DELETE request:" + personsList);
 		return personsList;
+	}
+	
+	/**
+	 * Gets a list of emails
+	 * 
+	 * @param city : city for which we want to have persons emails (String)
+	 * @return a list of emails (List of String)
+	 * @throws IOException 
+	 */
+	@GetMapping("/communityEmail")
+	public List<String> getCommunityEmail(@RequestParam ("city") String city) throws IOException {
+		List<String> emailsList = service.getEmails(city);
+		return emailsList;
+		
 	}
 }

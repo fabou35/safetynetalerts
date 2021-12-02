@@ -119,4 +119,18 @@ public class PersonApiControllerTest {
 				.content(personJsonObject.toString()))
 				.andExpect(status().isOk());
 	}
+	
+	@Test
+	public void testGetCommunityEmail() throws Exception {
+		// GIVEN
+		String city = "";
+		
+		// WHEN
+		city = "Culver";
+		
+		// THEN
+		mockMvc.perform(get("/communityEmail")
+				.param("city", city))
+		.andExpect(status().isOk());
+	}
 }

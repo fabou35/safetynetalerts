@@ -108,4 +108,34 @@ public class PersonApiServiceTest {
 		assertThat(personsList).doesNotContain(personToDelete);
 
 	}
+	
+	@Test
+	public void getEmailsReturnNoEmptyListForCityFromData() throws IOException {
+		// GIVEN
+		List<Person> personsList = service.getPersons();
+		List<String> emailsList = new ArrayList<>();
+		String city = personsList.get(0).getCity();
+		
+		// WHEN
+		emailsList = service.getEmails(city);
+		
+		// THEN
+		assertThat(emailsList).contains(personsList.get(0).getEmail());
+		
+	}
+	
+	@Test
+	public void getEmailsReturnsEmptyListForFalseCity() throws IOException {
+		// GIVEN
+		List<String> emailsList = new ArrayList<>();
+		String city = "False city";
+		
+		// WHEN
+		emailsList = service.getEmails(city);
+		
+		// THEN
+		assertThat(emailsList).isEmpty();
+	}
+	
+	
 }

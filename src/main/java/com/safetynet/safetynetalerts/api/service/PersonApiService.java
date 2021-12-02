@@ -41,7 +41,7 @@ public class PersonApiService {
 	}
 
 	/**
-	 * updates person info in persons list
+	 * Updates person info in persons list
 	 * 
 	 * @param personsList : List of Person
 	 * @param personToUpdate : Person to update in the persons list  
@@ -63,7 +63,7 @@ public class PersonApiService {
 	}
 
 	/**
-	 * deletes a person in a persons list
+	 * Deletes a person in a persons list
 	 * 
 	 * @param personsList : List of Person
 	 * @param personToDelete : Person to delete from the persons list
@@ -81,4 +81,26 @@ public class PersonApiService {
 		personsList.removeAll(toRemove);
 		return personsList;
 	}
+	
+	/**
+	 * Retrieves a list of emails for a city
+	 * 
+	 * @param city : city for which we want to have persons emails (String)
+	 * @return a list of emails (List of String)
+	 * @throws IOException 
+	 */
+	public List<String> getEmails(String city) throws IOException{
+		List<Person> personsList = getPersons();
+		List<String> emailsList = new ArrayList<>();
+		for(Person person : personsList) {
+			if(person.getCity().equals(city)) {
+				emailsList.add(person.getEmail());
+			}
+		}
+		return emailsList;
+		
+	}
+	
+	
+	
 }
