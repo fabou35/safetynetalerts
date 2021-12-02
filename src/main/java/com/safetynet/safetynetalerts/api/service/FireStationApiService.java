@@ -106,33 +106,17 @@ public class FireStationApiService {
 	}
 
 	/**
-	 * Deletes station mapping for a station number
+	 * Deletes station / address mapping
 	 * 
 	 * @param fireStationsList : List of FireStation
-	 * @param stationToDelete  : FireStation to delete from the fire stations list
+	 * @param fireStationToDelete  : FireStation to delete from the fire stations list
 	 * @return fire stations list without the deleted fire station
 	 */
-	public List<FireStation> deleteFireStation(List<FireStation> fireStationsList, String stationToDelete) {
+	public List<FireStation> deleteFireStation(List<FireStation> fireStationsList, FireStation fireStationToDelete) {
 		List<FireStation> newFireStationsList = new ArrayList<>();
 		for (FireStation station : fireStationsList) {
-			if (!station.getStationNumber().equals(stationToDelete)) {
-				newFireStationsList.add(station);
-			}
-		}
-		return newFireStationsList;
-	}
-
-	/**
-	 * Deletes an address for a station number
-	 * 
-	 * @param fireStationsList : List of FireStation
-	 * @param addressToDelete  : the address (String) to delete
-	 * @return fire stations list after an address is deleted for a fire station
-	 */
-	public List<FireStation> deleteAddress(List<FireStation> fireStationsList, String addressToDelete) {
-		List<FireStation> newFireStationsList = new ArrayList<>();
-		for (FireStation station : fireStationsList) {
-			if (!station.getAddresses().contains(addressToDelete)) {
+			if (!(station.getStationNumber().equals(fireStationToDelete.getStationNumber()) && 
+					station.getAddresses().equals(fireStationToDelete.getAddresses()))) {
 				newFireStationsList.add(station);
 			}
 		}

@@ -155,32 +155,9 @@ public class FireStationApiServiceTest {
 		fireStation2.addAddress("address2");
 		fireStationsList.add(fireStation1);
 		fireStationsList.add(fireStation2);
-		String stationToDelete = "1";
 		
 		// WHEN
-		newFireStationsList = service.deleteFireStation(fireStationsList, stationToDelete);
-		
-		// THEN
-		assertThat(newFireStationsList).doesNotContain(fireStation1);
-	}
-	
-	@Test
-	public void deleteAnAddressForAFireStationFromFireStationsList() {
-		// GIVEN
-		List<FireStation> fireStationsList = new ArrayList<>();
-		List<FireStation> newFireStationsList = new ArrayList<>();
-		FireStation fireStation1 = new FireStation();
-		FireStation fireStation2 = new FireStation();
-		fireStation1.setStationNumber("1");
-		fireStation1.addAddress("address1");
-		fireStation2.setStationNumber("2");
-		fireStation2.addAddress("address2");
-		fireStationsList.add(fireStation1);
-		fireStationsList.add(fireStation2);
-		String addressToDelete = "address1";
-		
-		// WHEN
-		newFireStationsList = service.deleteAddress(fireStationsList, addressToDelete);
+		newFireStationsList = service.deleteFireStation(fireStationsList, fireStation1);
 		
 		// THEN
 		assertThat(newFireStationsList).doesNotContain(fireStation1);
