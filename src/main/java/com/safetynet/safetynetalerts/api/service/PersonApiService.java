@@ -1,13 +1,20 @@
 package com.safetynet.safetynetalerts.api.service;
 
 import java.io.IOException;
+import java.lang.annotation.Annotation;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.safetynet.safetynetalerts.api.repository.MedicalRecordApiRepository;
 import com.safetynet.safetynetalerts.api.repository.PersonApiRepository;
+import com.safetynet.safetynetalerts.model.MedicalRecord;
 import com.safetynet.safetynetalerts.model.Person;
 
 @Service
@@ -15,6 +22,9 @@ public class PersonApiService {
 
 	@Autowired
 	private PersonApiRepository repository;
+	
+	@Autowired
+	private MedicalRecordApiRepository medicalRecordRepository;
 
 	/**
 	 * Retrieves persons data from PersonApiRepository
@@ -101,6 +111,62 @@ public class PersonApiService {
 		
 	}
 	
+	/**
+	 * Retrieves data for a person identified with first and last names
+	 * 
+	 * @param firstName : person's first name (String)
+	 * @param lastName : person's last name (String)
+	 * @return a Map of person's data
+	 * @throws IOException
+	 */
+	public Map<String, String> getPersonInfo(String firstName, String lastName) throws IOException{
+		List<MedicalRecord> medicalRecordsList = new ArrayList<>();
+		medicalRecordsList = medicalRecordRepository.getMedicalRecordsDatas();
+		List<Person> personsList = getPersons();
+		Map<String, String> personInfo = new HashMap<>();
+		for(Person person : personsList) {
+			if(person.getFirstName().equals(firstName) && person.getLastName().equals(lastName)) {
+				personInfo.put("firstName", firstName);
+				personInfo.put("lastName", lastName);
+				long age = calculateAge(person);
+				personInfo.put("age", Long.toString(age));
+				personInfo.put("address", person.getAddress());
+				personInfo.put("email", person.getEmail());
+			}
+		}
+		for(MedicalRecord medicalRecord : medicalRecordsList) {
+			if(medicalRecord.getFirstName().equals(firstName) && medicalRecord.getLastName().equals(lastName)) {
+				personInfo.put("medications", medicalRecord.getMedications().toString());
+				personInfo.put("allergies", medicalRecord.getAllergies().toString());
+			}
+		}
+		return personInfo;
+		
+	}
 	
+	/**
+	 * Calculates and returns a person's age
+	 * 
+	 * @param person : the Person for who age is calculated
+	 * @return the person's age (Long)
+	 * @throws IOException
+	 */
+	public long calculateAge(Person person) throws IOException {
+		List<MedicalRecord> medicalRecords = new ArrayList<>();
+		medicalRecords = medicalRecordRepository.getMedicalRecordsDatas();
+		long age = 0;
+		for(MedicalRecord medicalRecord : medicalRecords) {
+			if(medicalRecord.getFirstName().equals(person.getFirstName()) &&
+					medicalRecord.getLastName().equals(person.getLastName())) {
+				String birthdate = medicalRecord.getBirthdate();
+				String[] birthdateSplit = birthdate.split("/");
+				LocalDate date = LocalDate.of(Integer.parseInt(birthdateSplit[2]), Integer.parseInt(birthdateSplit[0]), Integer.parseInt(birthdateSplit[1]));
+				LocalDate now = LocalDate.now();
+				age = ChronoUnit.YEARS.between(date, now);
+			}
+		}
+		return age;
+		
+	}
 	
 }

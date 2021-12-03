@@ -4,13 +4,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.safetynet.safetynetalerts.api.service.PersonApiService;
+import com.safetynet.safetynetalerts.model.MedicalRecord;
 import com.safetynet.safetynetalerts.model.Person;
 
 @SpringBootTest
@@ -137,5 +142,30 @@ public class PersonApiServiceTest {
 		assertThat(emailsList).isEmpty();
 	}
 	
+	@Test
+	public void calculatesTheAgeForAPerson() throws IOException{
+		// GIVEN
+		Person person = new Person();
+		person = service.getPersons().get(0);
+		
+		// WHEN
+		Long age = service.calculateAge(person);
+		
+		// THEN
+		assertThat(age).isEqualTo(37);
+	}
 	
+	@Test
+	public void getPersonInfoReturnsNoEmptyMap() throws IOException {
+		// GIVEN
+		Person person = new Person();
+		person = service.getPersons().get(0);
+		Map<String, String> personInfo = new HashMap<>();
+		
+		// WHEN
+		personInfo = service.getPersonInfo(person.getFirstName(), person.getLastName());
+		
+		// THEN
+		assertThat(personInfo).isNotEmpty();
+	}
 }

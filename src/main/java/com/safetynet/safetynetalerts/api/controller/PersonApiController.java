@@ -3,7 +3,9 @@ package com.safetynet.safetynetalerts.api.controller;
 import java.io.IOException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -99,7 +101,20 @@ public class PersonApiController {
 	@GetMapping("/communityEmail")
 	public List<String> getCommunityEmail(@RequestParam ("city") String city) throws IOException {
 		List<String> emailsList = service.getEmails(city);
+		log.info("Request send for communityEmail");
+		log.info("Response for the communityEmail request:" + emailsList);
 		return emailsList;
+		
+	}
+	
+	@GetMapping("/personInfo")
+	public Map<String, String> getPersonInfo(@RequestParam ("firstName") String firstName, 
+			@RequestParam ("lastName") String lastName) throws IOException{
+		Map<String, String> personInfo = new HashMap<>();
+		personInfo = service.getPersonInfo(firstName, lastName);
+		log.info("Request send for personInfo");
+		log.info("Response for the personInfo request:" + personInfo);
+		return personInfo;
 		
 	}
 }

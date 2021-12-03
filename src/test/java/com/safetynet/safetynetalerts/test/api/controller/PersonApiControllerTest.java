@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -131,6 +132,17 @@ public class PersonApiControllerTest {
 		// THEN
 		mockMvc.perform(get("/communityEmail")
 				.param("city", city))
+		.andExpect(status().isOk());
+	}
+	
+	@Test
+	public void testGetPersonInfo() throws Exception {
+		String firstName = "first name";
+		String lastName = "last name";
+		
+		mockMvc.perform(get("/personInfo")
+				.param("lastName", lastName)
+				.param("firstName", firstName))
 		.andExpect(status().isOk());
 	}
 }
