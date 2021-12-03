@@ -11,8 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.safetynet.safetynetalerts.api.repository.FireStationApiRepository;
-import com.safetynet.safetynetalerts.api.repository.PersonApiRepository;
+import com.safetynet.safetynetalerts.api.repository.MedicalRecordApiRepository;
 import com.safetynet.safetynetalerts.model.FireStation;
+import com.safetynet.safetynetalerts.model.MedicalRecord;
 import com.safetynet.safetynetalerts.model.Person;
 
 @Service
@@ -23,6 +24,9 @@ public class FireStationApiService {
 
 	@Autowired
 	private PersonApiService personService;
+
+	@Autowired
+	private MedicalRecordApiRepository medicalRecordRepository;
 
 	/**
 	 * Retrieves fire stations data from FireStationApiRepository
@@ -197,6 +201,105 @@ public class FireStationApiService {
 		countMap.put("children", Long.toString(childrenNumber));
 		countMap.put("adults", Long.toString(adultsNumber));
 		persons.add(countMap);
+		return persons;
+
+	}
+
+	/**
+	 * Retrieves a list of persons for an address with the station number
+	 * 
+	 * @param address : address for the list of persons (String)
+	 * @return a list of persons with first and last names, phone, age, medications,
+	 *         allergies and fire station number
+	 * @throws IOException
+	 */
+	public List<Map<String, String>> getPersonsDataForAnaddressWithStationNumber(String address) throws IOException {
+		List<Map<String, String>> persons = new ArrayList<>();
+		List<FireStation> fireStationsList = new ArrayList<>();
+		fireStationsList = getFireStations();
+		String stationNumber;
+
+		for (FireStation fireStation : fireStationsList) {
+			if (fireStation.getAddresses().contains(address)) {
+				stationNumber = fireStation.getStationNumber();
+				Map<String, String> stationMap = new HashMap<>();
+				stationMap.put("station", stationNumber);
+				persons.add(stationMap);
+			}
+		}
+		
+		persons.addAll(getPersonsDataForAnaddress(address));
+		return persons;
+
+	}
+	
+	/**
+	 * Retrieves a list of data's persons served by a list of fire stations
+	 * 
+	 * @param stationsList : list fire stations for the list of persons
+	 * @return a list of person with first and last names, phone, age, medications,
+	 *         allergies
+	 * @throws IOException 
+	 */
+	public List<Map<String, String>> getPersonsDataForFireStationList(List<String> stationsList) throws IOException{
+		List<Map<String, String>> persons = new ArrayList<>();
+		List<FireStation> fireStationsList = repository.getFireStationsDatas();
+		List<String> addresses = new ArrayList<>();
+		for(FireStation fireStation : fireStationsList) {
+			if(stationsList.contains(fireStation.getStationNumber())) {
+				for(String address : fireStation.getAddresses()) {
+					if(!addresses.contains(address)) {
+						addresses.add(address);
+					}
+				}
+			}
+		}
+		for(String address : addresses) {
+			List<Map<String, String>> personsMaps = new ArrayList<>();
+			personsMaps = getPersonsDataForAnaddress(address);
+			persons.addAll(personsMaps);
+		}
+		return persons;
+		
+	}
+	
+	/**
+	 * Retrieves a list of persons for an address
+	 * 
+	 * @param address : address for the list of persons (String)
+	 * @return a list of persons with first and last names, phone, age, medications,
+	 *         allergies
+	 * @throws IOException
+	 */
+	public List<Map<String, String>> getPersonsDataForAnaddress(String address) throws IOException {
+		List<Map<String, String>> persons = new ArrayList<>();
+		List<MedicalRecord> medicalRecordsList = new ArrayList<>();
+		medicalRecordsList = medicalRecordRepository.getMedicalRecordsDatas();
+
+		List<Person> personsList = personService.getPersons();
+		for (Person person : personsList) {
+			Map<String, String> personMap = new HashMap<>();
+			if (person.getAddress().equals(address)) {
+				personMap.put("firstName", person.getFirstName());
+				personMap.put("lastName", person.getLastName());
+				personMap.put("phone", person.getPhone());
+				long age = personService.calculateAge(person);
+				personMap.put("age", Long.toString(age));
+				for (MedicalRecord medicalRecord : medicalRecordsList) {
+
+					if (medicalRecord.getFirstName().equals(person.getFirstName()) &&
+							medicalRecord.getLastName().equals(person.getLastName())) {
+						if (medicalRecord.getMedications() != null) {
+							personMap.put("medications", medicalRecord.getMedications().toString());
+						}
+						if (medicalRecord.getAllergies() != null) {
+							personMap.put("allergies", medicalRecord.getAllergies().toString());
+						}
+					}
+				}
+				persons.add(personMap);
+			}
+		}
 		return persons;
 
 	}

@@ -1,6 +1,7 @@
 package com.safetynet.safetynetalerts.test.api.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -23,11 +24,13 @@ public class FireStationApiControllerTest {
 	@Autowired
 	private MockMvc mockMvc;
 	
+	/*
 	@Test
 	public void testGetFireStations() throws Exception{
 		mockMvc.perform(get("/firestation"))
 			.andExpect(status().isOk());
 	}
+	*/
 	
 	@Test
 	public void testSaveFireStation() throws Exception {

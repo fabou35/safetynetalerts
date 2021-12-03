@@ -131,4 +131,35 @@ public class FireStationApiController {
 		return personsList;
 		
 	}
+	
+	/**
+	 * Gets a list of persons for an address
+	 * 
+	 * @param address : address for the list of persons (String)
+	 * @return a list of persons with first and last names, phone, age, medications,
+	 *         allergies and fire station number
+	 * @throws IOException 
+	 */
+	@GetMapping("/fire")
+	public List<Map<String, String>> getPersonsDataForAnaddress(@RequestParam("address") String address) throws IOException{
+		List<Map<String, String>> personsList = new ArrayList<>();
+		personsList = service.getPersonsDataForAnaddressWithStationNumber(address);
+		return personsList;
+		
+	}
+	
+	/**
+	 * Gets a list of data's persons served by a list of fire stations
+	 * 
+	  * @param stationsList : list fire stations for the list of persons
+	 * @return a list of person with first and last names, phone, age, medications,
+	 *         allergies
+	 * @throws IOException 
+	 */
+	@GetMapping("/flood/stations")
+	public List<Map<String, String>> getPersonsDataForFireStationList(@RequestParam("stations") List<String> stationsList) throws IOException{
+		List<Map<String, String>> personsList = new ArrayList<>();
+		personsList = service.getPersonsDataForFireStationList(stationsList);
+		return personsList;
+	}
 }
