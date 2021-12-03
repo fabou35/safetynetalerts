@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.safetynet.safetynetalerts.api.service.FireStationApiService;
@@ -98,4 +99,17 @@ public class FireStationApiController {
 
 	}
 
+	/**
+	 * Get phone numbers of persons served by a fire station
+	 * 
+	 * @param stationNumber : the number of the fire station (String)
+	 * @return a phone numbers list
+	 * @throws IOException
+	 */
+	@GetMapping("/phoneAlert")
+	public List<String> getPhoneNumbers(@RequestParam ("firestation") String stationNumber) throws IOException{
+		List<String> phoneNumbersList = new ArrayList<>();
+		phoneNumbersList = service.getPhoneNumbers(stationNumber);
+		return phoneNumbersList;
+	}
 }

@@ -9,13 +9,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.safetynet.safetynetalerts.api.repository.FireStationApiRepository;
+import com.safetynet.safetynetalerts.api.repository.PersonApiRepository;
 import com.safetynet.safetynetalerts.model.FireStation;
+import com.safetynet.safetynetalerts.model.Person;
 
 @Service
 public class FireStationApiService {
 
 	@Autowired
 	private FireStationApiRepository repository;
+	
+	@Autowired
+	private PersonApiRepository personRepository;
 
 	/**
 	 * Retrieves fire stations data from FireStationApiRepository
@@ -121,5 +126,30 @@ public class FireStationApiService {
 			}
 		}
 		return newFireStationsList;
+	}
+	
+	/**
+	 * Retrieves phone numbers of persons served by a fire station
+	 * 
+	 * @param stationNumber : the number of the fire station (String)
+	 * @return a phone numbers list
+	 * @throws IOException
+	 */
+	public List<String> getPhoneNumbers(String stationNumber) throws IOException{
+		List<FireStation> fireStationsList = new ArrayList<>();
+		fireStationsList = getFireStations();
+		List<Person> personsList = new ArrayList<>();
+		personsList = personRepository.getPersonsDatas();
+		List<String> phoneNumbersList = new ArrayList<>();
+		for(FireStation fireStation : fireStationsList) {
+			if(fireStation.getStationNumber().equals(stationNumber)) {
+				for(Person person : personsList) {
+					if (fireStation.getAddresses().contains(person.getAddress())) {
+						phoneNumbersList.add(person.getPhone());
+					}
+				}
+			}
+		}
+		return phoneNumbersList;
 	}
 }

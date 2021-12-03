@@ -162,4 +162,19 @@ public class FireStationApiServiceTest {
 		// THEN
 		assertThat(newFireStationsList).doesNotContain(fireStation1);
 	}
+	
+	@Test
+	public void getPhoneNumbersReturnNoEmptyListForAStationNumberFromData() throws IOException {
+		// GIVEN
+		List<FireStation> fireStationsList = new ArrayList<>();
+		fireStationsList = service.getFireStations();
+		List<String> phoneNumbersList = new ArrayList<>();
+		String stationNumber = fireStationsList.get(0).getStationNumber();
+		
+		// WHEN
+		phoneNumbersList = service.getPhoneNumbers(stationNumber);
+		
+		// THEN
+		assertThat(phoneNumbersList).isNotEmpty();
+	}
 }

@@ -102,4 +102,18 @@ public class FireStationApiControllerTest {
 		.andExpect(status().isOk());
 		
 	}
+	
+	@Test
+	public void testGetPhoneNumbers() throws Exception {
+		// GIVEN
+		String stationNumber = "";
+		
+		// WHEN
+		stationNumber = "1";
+		
+		// THEN
+		mockMvc.perform(get("/phoneAlert")
+				.param("firestation", stationNumber))
+		.andExpect(status().isOk());
+	}
 }
