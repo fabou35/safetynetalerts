@@ -2,7 +2,6 @@ package com.safetynet.safetynetalerts.api.controller;
 
 import java.io.IOException;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -107,6 +106,14 @@ public class PersonApiController {
 		
 	}
 	
+	/**
+	 * Gets data for a person identified with first and last names
+	 * 
+	 * @param firstName: person's first name (String)
+	 * @param lastName  : person's last name (String)
+	 * @return a Map of person's data
+	 * @throws IOException
+	 */
 	@GetMapping("/personInfo")
 	public Map<String, String> getPersonInfo(@RequestParam ("firstName") String firstName, 
 			@RequestParam ("lastName") String lastName) throws IOException{
@@ -116,5 +123,19 @@ public class PersonApiController {
 		log.info("Response for the personInfo request:" + personInfo);
 		return personInfo;
 		
+	}
+	
+	/**
+	 * Gets a list of children from an address if exists and their parents
+	 * 
+	 * @param address : address we want to retrieve the list
+	 * @return a list of children if exist or null if don't
+	 * @throws IOException
+	 */
+	@GetMapping("/childAlert")
+	public Map<String, String> getChildrenForAnAddress(@RequestParam("address") String address) throws IOException{
+		Map<String, String> personsForAnAddress = new HashMap<>();
+		personsForAnAddress = service.getChildrenForAnAddress(address);
+		return personsForAnAddress;
 	}
 }
