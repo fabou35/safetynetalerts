@@ -3,7 +3,9 @@ package com.safetynet.safetynetalerts.api.service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,9 +20,9 @@ public class FireStationApiService {
 
 	@Autowired
 	private FireStationApiRepository repository;
-	
+
 	@Autowired
-	private PersonApiRepository personRepository;
+	private PersonApiService personService;
 
 	/**
 	 * Retrieves fire stations data from FireStationApiRepository
@@ -113,21 +115,22 @@ public class FireStationApiService {
 	/**
 	 * Deletes station / address mapping
 	 * 
-	 * @param fireStationsList : List of FireStation
-	 * @param fireStationToDelete  : FireStation to delete from the fire stations list
+	 * @param fireStationsList    : List of FireStation
+	 * @param fireStationToDelete : FireStation to delete from the fire stations
+	 *                            list
 	 * @return fire stations list without the deleted fire station
 	 */
 	public List<FireStation> deleteFireStation(List<FireStation> fireStationsList, FireStation fireStationToDelete) {
 		List<FireStation> newFireStationsList = new ArrayList<>();
 		for (FireStation station : fireStationsList) {
-			if (!(station.getStationNumber().equals(fireStationToDelete.getStationNumber()) && 
+			if (!(station.getStationNumber().equals(fireStationToDelete.getStationNumber()) &&
 					station.getAddresses().equals(fireStationToDelete.getAddresses()))) {
 				newFireStationsList.add(station);
 			}
 		}
 		return newFireStationsList;
 	}
-	
+
 	/**
 	 * Retrieves phone numbers of persons served by a fire station
 	 * 
@@ -135,15 +138,15 @@ public class FireStationApiService {
 	 * @return a phone numbers list
 	 * @throws IOException
 	 */
-	public List<String> getPhoneNumbers(String stationNumber) throws IOException{
+	public List<String> getPhoneNumbers(String stationNumber) throws IOException {
 		List<FireStation> fireStationsList = new ArrayList<>();
 		fireStationsList = getFireStations();
 		List<Person> personsList = new ArrayList<>();
-		personsList = personRepository.getPersonsDatas();
+		personsList = personService.getPersons();
 		List<String> phoneNumbersList = new ArrayList<>();
-		for(FireStation fireStation : fireStationsList) {
-			if(fireStation.getStationNumber().equals(stationNumber)) {
-				for(Person person : personsList) {
+		for (FireStation fireStation : fireStationsList) {
+			if (fireStation.getStationNumber().equals(stationNumber)) {
+				for (Person person : personsList) {
 					if (fireStation.getAddresses().contains(person.getAddress())) {
 						phoneNumbersList.add(person.getPhone());
 					}
@@ -151,5 +154,50 @@ public class FireStationApiService {
 			}
 		}
 		return phoneNumbersList;
+	}
+
+	/**
+	 * Retrieves a list of persons served by a fire station
+	 * 
+	 * @param stationNumber : number of the fire station
+	 * @return a Map of persons with first and last name, address, phone and the
+	 *         count of children and adults
+	 * @throws IOException
+	 */
+	public List<Map<String, String>> getPersonsForFireStation(String stationNumber) throws IOException {
+		List<Map<String, String>> persons = new ArrayList<>();
+		List<FireStation> fireStationsList = new ArrayList<>();
+		fireStationsList = getFireStations();
+		List<Person> personsList = new ArrayList<>();
+		personsList = personService.getPersons();
+		int adultsNumber = 0;
+		int childrenNumber = 0;
+		for (FireStation fireStation : fireStationsList) {
+			if (fireStation.getStationNumber().equals(stationNumber)) {
+				for (Person person : personsList) {
+					Map<String, String> personMap = new HashMap<>();
+					if (fireStation.getAddresses().contains(person.getAddress())) {
+						personMap.put("firstName", person.getFirstName());
+						personMap.put("lastName", person.getLastName());
+						personMap.put("address", person.getAddress());
+						personMap.put("phone", person.getPhone());
+						long age = personService.calculateAge(person);
+						if (age <= 18) {
+							childrenNumber++;
+						} else {
+							adultsNumber++;
+						}
+						persons.add(personMap);
+					}
+
+				}
+			}
+		}
+		Map<String, String> countMap = new HashMap<>();
+		countMap.put("children", Long.toString(childrenNumber));
+		countMap.put("adults", Long.toString(adultsNumber));
+		persons.add(countMap);
+		return persons;
+
 	}
 }

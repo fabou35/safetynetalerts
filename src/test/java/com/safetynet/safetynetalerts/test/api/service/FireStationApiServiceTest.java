@@ -5,8 +5,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
@@ -176,5 +178,21 @@ public class FireStationApiServiceTest {
 		
 		// THEN
 		assertThat(phoneNumbersList).isNotEmpty();
+	}
+	
+	@Test
+	public void getPersonsForFireStationNoEmptyReturn() throws IOException {
+		// GIVEN
+		List<FireStation> fireStationsList = new ArrayList<>();
+		fireStationsList = service.getFireStations();
+		String stationNumber = fireStationsList.get(0).getStationNumber();
+		List<Map<String, String>> personsMap = new ArrayList<>();
+		
+		// WHEN
+		personsMap = service.getPersonsForFireStation(stationNumber);
+		
+		// THEN
+		assertThat(personsMap).isNotEmpty();
+		
 	}
 }

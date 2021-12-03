@@ -2,8 +2,11 @@ package com.safetynet.safetynetalerts.api.controller;
 
 import java.io.IOException;
 
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,8 +35,8 @@ public class FireStationApiController {
 	 * @return List of ordered FireStation
 	 * @throws IOException
 	 */
-	@GetMapping("/firestation")
-	public List<FireStation> getFireStations() throws IOException {
+	/*@GetMapping("/firestation")
+	public List<FireStation> getFireStations(@RequestParam ("stationNumber") String stationNumber) throws IOException {
 		List<FireStation> fireStationsList = new ArrayList<>();
 		fireStationsList = service.getFireStations();
 		fireStationsList = service.getFireStationsAddressesInSet(fireStationsList);
@@ -41,7 +44,7 @@ public class FireStationApiController {
 		log.info("GET request for firestation send");
 		log.info("Response for the GET request for firestation: " + fireStationsList);
 		return fireStationsList;
-	}
+	}*/
 
 	/**
 	 * Adds a fire station to the fire stations list
@@ -111,5 +114,21 @@ public class FireStationApiController {
 		List<String> phoneNumbersList = new ArrayList<>();
 		phoneNumbersList = service.getPhoneNumbers(stationNumber);
 		return phoneNumbersList;
+	}
+	
+	/**
+	 * Gets a list of persons served by a fire station
+	 * 
+	 * @param stationNumber : number of the fire station
+	 * @return a Map of persons with first and last name, address, phone and the
+	 *         count of children and adults
+	 * @throws IOException
+	 */
+	@GetMapping("/firestation")
+	public List<Map<String, String>> getPersonsForFireStation(@RequestParam("stationNumber") String stationNumber) throws IOException{
+		List<Map<String, String>> personsList = new ArrayList<>();
+		personsList = service.getPersonsForFireStation(stationNumber);
+		return personsList;
+		
 	}
 }
