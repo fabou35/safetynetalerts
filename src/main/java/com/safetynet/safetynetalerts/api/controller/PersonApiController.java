@@ -1,7 +1,5 @@
 package com.safetynet.safetynetalerts.api.controller;
 
-import java.io.IOException;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,10 +29,9 @@ public class PersonApiController {
 	 * Get persons list
 	 * 
 	 * @return List of Person
-	 * @throws IOException
 	 */
 	@GetMapping("/person")
-	public List<Person> getPersons() throws IOException {
+	public List<Person> getPersons() {
 		List<Person> personsList = service.getPersons();
 
 		log.info("GET request send");
@@ -47,10 +44,9 @@ public class PersonApiController {
 	 * 
 	 * @param newPerson : Person to add to the persons list
 	 * @return persons list with new person saved
-	 * @throws IOException
 	 */
 	@PostMapping("/person")
-	public List<Person> savePerson(@RequestBody Person newPerson) throws IOException {
+	public List<Person> savePerson(@RequestBody Person newPerson) {
 		List<Person> personsList = service.getPersons();
 		personsList = service.savePerson(personsList, newPerson);
 		log.info("POST request send with body: " + newPerson);
@@ -63,10 +59,9 @@ public class PersonApiController {
 	 * 
 	 * @param personToUpdate : Person to update to in the persons list
 	 * @return persons list with updated person
-	 * @throws IOException
 	 */
 	@PutMapping("/person")
-	public List<Person> updatePerson(@RequestBody Person personToUpdate) throws IOException {
+	public List<Person> updatePerson(@RequestBody Person personToUpdate) {
 		List<Person> personsList = service.getPersons();
 		personsList = service.updatePerson(personsList, personToUpdate);
 		log.info("PUT request send with body: " + personToUpdate);
@@ -79,10 +74,9 @@ public class PersonApiController {
 	 * 
 	 * @param personToDelete : Person to delete from the persons list
 	 * @return persons list without the deleted person
-	 * @throws IOException
 	 */
 	@DeleteMapping("/person")
-	public List<Person> deletePerson(@RequestBody Person personToDelete) throws IOException {
+	public List<Person> deletePerson(@RequestBody Person personToDelete) {
 		List<Person> personsList = service.getPersons();
 		personsList = service.deletePerson(personsList, personToDelete);
 		log.info("DELETE request send with body: " + personToDelete);
@@ -95,10 +89,9 @@ public class PersonApiController {
 	 * 
 	 * @param city : city for which we want to have persons emails (String)
 	 * @return a list of emails (List of String)
-	 * @throws IOException 
 	 */
 	@GetMapping("/communityEmail")
-	public List<String> getCommunityEmail(@RequestParam ("city") String city) throws IOException {
+	public List<String> getCommunityEmail(@RequestParam ("city") String city) {
 		List<String> emailsList = service.getEmails(city);
 		log.info("Request send for communityEmail");
 		log.info("Response for the communityEmail request:" + emailsList);
@@ -112,11 +105,10 @@ public class PersonApiController {
 	 * @param firstName: person's first name (String)
 	 * @param lastName  : person's last name (String)
 	 * @return a Map of person's data
-	 * @throws IOException
 	 */
 	@GetMapping("/personInfo")
 	public Map<String, String> getPersonInfo(@RequestParam ("firstName") String firstName, 
-			@RequestParam ("lastName") String lastName) throws IOException{
+			@RequestParam ("lastName") String lastName){
 		Map<String, String> personInfo = new HashMap<>();
 		personInfo = service.getPersonInfo(firstName, lastName);
 		log.info("Request send for personInfo");
@@ -130,10 +122,9 @@ public class PersonApiController {
 	 * 
 	 * @param address : address we want to retrieve the list
 	 * @return a list of children if exist or null if don't
-	 * @throws IOException
 	 */
 	@GetMapping("/childAlert")
-	public Map<String, String> getChildrenForAnAddress(@RequestParam("address") String address) throws IOException{
+	public Map<String, String> getChildrenForAnAddress(@RequestParam("address") String address){
 		Map<String, String> personsForAnAddress = new HashMap<>();
 		personsForAnAddress = service.getChildrenForAnAddress(address);
 		return personsForAnAddress;

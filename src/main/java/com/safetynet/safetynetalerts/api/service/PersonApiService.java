@@ -1,11 +1,10 @@
 package com.safetynet.safetynetalerts.api.service;
 
-import java.io.IOException;
-import java.lang.annotation.Annotation;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,9 +29,8 @@ public class PersonApiService {
 	 * Retrieves persons data from PersonApiRepository
 	 * 
 	 * @return List of Person retrieved from data
-	 * @throws IOException
 	 */
-	public List<Person> getPersons() throws IOException {
+	public List<Person> getPersons() {
 		return repository.getPersonsDatas();
 	}
 
@@ -42,7 +40,6 @@ public class PersonApiService {
 	 * @param personsList : List of Person
 	 * @param newPerson   : Person to add to the persons list
 	 * @return persons list with new person saved
-	 * @throws IOException
 	 */
 	public List<Person> savePerson(List<Person> personsList, Person newPerson) {
 		personsList.add(newPerson);
@@ -56,7 +53,6 @@ public class PersonApiService {
 	 * @param personsList    : List of Person
 	 * @param personToUpdate : Person to update in the persons list
 	 * @return persons list with updated person
-	 * @throws IOException
 	 */
 	public List<Person> updatePerson(List<Person> personsList, Person personToUpdate) {
 		List<Person> updatedPerson = new ArrayList<>();
@@ -78,7 +74,6 @@ public class PersonApiService {
 	 * @param personsList    : List of Person
 	 * @param personToDelete : Person to delete from the persons list
 	 * @return persons list without the deleted person
-	 * @throws IOException
 	 */
 	public List<Person> deletePerson(List<Person> personsList, Person personToDelete) {
 		List<Person> toRemove = new ArrayList<>();
@@ -97,9 +92,8 @@ public class PersonApiService {
 	 * 
 	 * @param city : city for which we want to have persons emails (String)
 	 * @return a list of emails (List of String)
-	 * @throws IOException
 	 */
-	public List<String> getEmails(String city) throws IOException {
+	public List<String> getEmails(String city) {
 		List<Person> personsList = getPersons();
 		List<String> emailsList = new ArrayList<>();
 		for (Person person : personsList) {
@@ -117,13 +111,12 @@ public class PersonApiService {
 	 * @param firstName : person's first name (String)
 	 * @param lastName  : person's last name (String)
 	 * @return a Map of person's data
-	 * @throws IOException
 	 */
-	public Map<String, String> getPersonInfo(String firstName, String lastName) throws IOException {
+	public Map<String, String> getPersonInfo(String firstName, String lastName) {
 		List<MedicalRecord> medicalRecordsList = new ArrayList<>();
 		medicalRecordsList = medicalRecordRepository.getMedicalRecordsDatas();
 		List<Person> personsList = getPersons();
-		Map<String, String> personInfo = new HashMap<>();
+		Map<String, String> personInfo = new LinkedHashMap<>();
 		for (Person person : personsList) {
 			if (person.getFirstName().equals(firstName) && person.getLastName().equals(lastName)) {
 				personInfo.put("firstName", firstName);
@@ -136,8 +129,16 @@ public class PersonApiService {
 		}
 		for (MedicalRecord medicalRecord : medicalRecordsList) {
 			if (medicalRecord.getFirstName().equals(firstName) && medicalRecord.getLastName().equals(lastName)) {
-				personInfo.put("medications", medicalRecord.getMedications().toString());
-				personInfo.put("allergies", medicalRecord.getAllergies().toString());
+				if (medicalRecord.getMedications() != null) {
+					String medication;
+					medication = String.join(",", medicalRecord.getMedications());
+					personInfo.put("medications", medication);
+				}
+				if (medicalRecord.getAllergies() != null) {
+					String allergie;
+					allergie = String.join(",", medicalRecord.getAllergies());
+					personInfo.put("allergies", allergie);
+				}
 			}
 		}
 		return personInfo;
@@ -149,9 +150,8 @@ public class PersonApiService {
 	 * 
 	 * @param address : address we want to retrieve the list
 	 * @return a list of children if exist or null if don't
-	 * @throws IOException
 	 */
-	public Map<String, String> getChildrenForAnAddress(String address) throws IOException {
+	public Map<String, String> getChildrenForAnAddress(String address) {
 
 		List<Map<String, String>> childrenList = new ArrayList<>();
 		List<Person> personsList = new ArrayList<>();
@@ -174,7 +174,7 @@ public class PersonApiService {
 			}
 		}
 		Map<String, String> homeHolder = new HashMap<>();
-		if(!childrenList.isEmpty()) {
+		if (!childrenList.isEmpty()) {
 			homeHolder.put("parents", personsForAnAddress.toString());
 			homeHolder.put("children", childrenList.toString());
 		}
@@ -186,9 +186,8 @@ public class PersonApiService {
 	 * 
 	 * @param person : the Person for who age is calculated
 	 * @return the person's age (Long)
-	 * @throws IOException
 	 */
-	public long calculateAge(Person person) throws IOException {
+	public long calculateAge(Person person) {
 		List<MedicalRecord> medicalRecords = new ArrayList<>();
 		medicalRecords = medicalRecordRepository.getMedicalRecordsDatas();
 		long age = 0;
@@ -204,7 +203,6 @@ public class PersonApiService {
 			}
 		}
 		return age;
-
 	}
 
 }
