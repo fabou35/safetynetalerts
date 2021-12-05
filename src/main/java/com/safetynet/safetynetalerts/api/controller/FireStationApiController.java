@@ -104,6 +104,8 @@ public class FireStationApiController {
 	public List<String> getPhoneNumbers(@RequestParam ("firestation") String stationNumber) {
 		List<String> phoneNumbersList = new ArrayList<>();
 		phoneNumbersList = service.getPhoneNumbers(stationNumber);
+		log.info("Request for phoneAlert send with body: " + stationNumber);
+		log.info("Response for phoneAlert request: " + phoneNumbersList);
 		return phoneNumbersList;
 	}
 	
@@ -118,6 +120,8 @@ public class FireStationApiController {
 	public List<Map<String, String>> getPersonsForFireStation(@RequestParam("stationNumber") String stationNumber) {
 		List<Map<String, String>> personsList = new ArrayList<>();
 		personsList = service.getPersonsForFireStation(stationNumber);
+		log.info("Request for firestation send with body: " + stationNumber);
+		log.info("Response for firestation request: " + personsList);
 		return personsList;
 		
 	}
@@ -133,6 +137,8 @@ public class FireStationApiController {
 	public List<Map<String, String>> getPersonsDataForAnaddress(@RequestParam("address") String address) {
 		List<Map<String, String>> personsList = new ArrayList<>();
 		personsList = service.getPersonsDataForAnaddressWithStationNumber(address);
+		log.info("Request for fire send with body: " + address);
+		log.info("Response for fire request: " + personsList);
 		return personsList;
 		
 	}
@@ -148,6 +154,8 @@ public class FireStationApiController {
 	public List<Map<String, String>> getPersonsDataForFireStationList(@RequestParam("stations") List<String> stationsList) {
 		List<Map<String, String>> personsList = new ArrayList<>();
 		personsList = service.getPersonsDataForFireStationList(stationsList);
+		log.info("Request for flood/stations send with body: " + stationsList);
+		log.info("Response for fire request: " + personsList);
 		return personsList;
 	}
 }

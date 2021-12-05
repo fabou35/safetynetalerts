@@ -93,7 +93,7 @@ public class PersonApiController {
 	@GetMapping("/communityEmail")
 	public List<String> getCommunityEmail(@RequestParam ("city") String city) {
 		List<String> emailsList = service.getEmails(city);
-		log.info("Request send for communityEmail");
+		log.info("Request send for communityEmail with body: " + city);
 		log.info("Response for the communityEmail request:" + emailsList);
 		return emailsList;
 		
@@ -111,7 +111,7 @@ public class PersonApiController {
 			@RequestParam ("lastName") String lastName){
 		Map<String, String> personInfo = new HashMap<>();
 		personInfo = service.getPersonInfo(firstName, lastName);
-		log.info("Request send for personInfo");
+		log.info("Request send for personInfo with body: " + firstName + " and " + lastName);
 		log.info("Response for the personInfo request:" + personInfo);
 		return personInfo;
 		
@@ -127,6 +127,8 @@ public class PersonApiController {
 	public Map<String, String> getChildrenForAnAddress(@RequestParam("address") String address){
 		Map<String, String> personsForAnAddress = new HashMap<>();
 		personsForAnAddress = service.getChildrenForAnAddress(address);
+		log.info("Request send for childAlert with body: " + address);
+		log.info("Response for the childAlert request:" + personsForAnAddress);
 		return personsForAnAddress;
 	}
 }
