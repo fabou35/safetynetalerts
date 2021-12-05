@@ -10,6 +10,9 @@ import org.springframework.stereotype.Repository;
 import com.jsoniter.any.Any;
 import com.safetynet.safetynetalerts.model.MedicalRecord;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Repository
 public class MedicalRecordApiRepository {
 
@@ -17,14 +20,16 @@ public class MedicalRecordApiRepository {
 	private DataFileReader reader;
 	
 	/**
-	 * Retrieves medical records datas from json file
+	 * Retrieves medical records data from json file
 	 * @return
 	 * @throws IOException
 	 */
-	public List<MedicalRecord> getMedicalRecordsDatas() throws IOException {
-		Any any = reader.readDatas();
-		Any medicalRecordsAny = any.get("medicalrecords");
+	public List<MedicalRecord> getMedicalRecordsDatas() {
 		List<MedicalRecord> medicalRecordsList = new ArrayList<>();
+		Any any = reader.readDatas();
+		try {
+		Any medicalRecordsAny = any.get("medicalrecords");
+		
 		for (Any m : medicalRecordsAny) {
 			MedicalRecord medicalRecords = new MedicalRecord();
 			medicalRecords.setFirstName(m.get("firstName").toString());
@@ -50,7 +55,9 @@ public class MedicalRecordApiRepository {
 			}
 			medicalRecordsList.add(medicalRecords);
 		}
-
+		}catch (Exception e) {
+			log.error("Impossible to retrieve medical records list from data: " + e.toString());
+		}
 		return medicalRecordsList;
 	}
 

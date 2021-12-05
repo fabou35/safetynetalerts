@@ -9,6 +9,9 @@ import org.springframework.stereotype.Component;
 import com.jsoniter.JsonIterator;
 import com.jsoniter.any.Any;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Component
 public class DataFileReader implements DataReader {
 
@@ -19,13 +22,18 @@ public class DataFileReader implements DataReader {
 	}
 
 	/**
-	 * retrieves datas from json file
+	 * retrieves data from json file
 	 */
 	@Override
-	public Any readDatas() throws IOException {
-		byte[] bytesFile = Files.readAllBytes(jsonFile().toPath());
-		JsonIterator jsonIter = JsonIterator.parse(bytesFile);
-		Any any = jsonIter.readAny();
+	public Any readDatas() {
+		Any any = null;
+		try {
+			byte[] bytesFile = Files.readAllBytes(jsonFile().toPath());
+			JsonIterator jsonIter = JsonIterator.parse(bytesFile);
+			any = jsonIter.readAny();
+		} catch (IOException e) {
+			log.error("File reading error: " + dataFilePath);
+		}
 		return any;
 
 	}

@@ -11,7 +11,9 @@ import com.jsoniter.any.Any;
 import com.safetynet.safetynetalerts.model.FireStation;
 import com.safetynet.safetynetalerts.model.Person;
 
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Repository
 public class FireStationApiRepository {
 
@@ -19,19 +21,25 @@ public class FireStationApiRepository {
 	private DataFileReader reader;
 
 	/**
-	 * Retrieves fire stations datas from json file
+	 * Retrieves fire stations data from json file
+	 * 
 	 * @return
 	 * @throws IOException
 	 */
-	public List<FireStation> getFireStationsDatas() throws IOException {
-		Any any = reader.readDatas();
-		Any fireStationAny = any.get("firestations");
+	public List<FireStation> getFireStationsDatas() {
 		List<FireStation> fireStationsList = new ArrayList<>();
-		for (Any f : fireStationAny) {
-			FireStation fireStation = new FireStation();
-			fireStation.setStationNumber(f.get("station").toString());
-			fireStation.addAddress(f.get("address").toString());
-			fireStationsList.add(fireStation);
+		Any any = reader.readDatas();
+		try {
+			Any fireStationAny = any.get("firestations");
+
+			for (Any f : fireStationAny) {
+				FireStation fireStation = new FireStation();
+				fireStation.setStationNumber(f.get("station").toString());
+				fireStation.addAddress(f.get("address").toString());
+				fireStationsList.add(fireStation);
+			}
+		} catch (Exception e) {
+			log.error("Impossible to retrieve fire stations list from data: " + e.toString());
 		}
 		return fireStationsList;
 	}
