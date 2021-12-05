@@ -1,6 +1,5 @@
 package com.safetynet.safetynetalerts.api.service;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,9 +19,8 @@ public class MedicalRecordApiService {
 	 * Retrieves medical records data from MedicalRecordApiRepository
 	 * 
 	 * @return list of medical records retrieved from data
-	 * @throws IOException
 	 */
-	public List<MedicalRecord> getMedicalRecords() throws IOException {
+	public List<MedicalRecord> getMedicalRecords() {
 		return repository.getMedicalRecordsDatas();
 	}
 

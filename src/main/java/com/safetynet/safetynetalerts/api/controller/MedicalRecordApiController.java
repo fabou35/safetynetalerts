@@ -23,30 +23,28 @@ public class MedicalRecordApiController {
 
 	@Autowired
 	private MedicalRecordApiService service;
-	
+
 	/**
-	 * gets the medical records list
+	 * Gets the medical records list
 	 * 
-	 * @return List<MedicalRecord> the medical records list 
-	 * @throws IOException
+	 * @return the medical records list
 	 */
 	@GetMapping("/medicalRecord")
-	public List<MedicalRecord> getMedicalRecords() throws IOException{
+	public List<MedicalRecord> getMedicalRecords() {
 		List<MedicalRecord> medicalRecordsList = service.getMedicalRecords();
 		log.info("GET request for medicalRecord send");
 		log.info("Response for the GET request for medicalRecord: " + medicalRecordsList);
 		return medicalRecordsList;
 	}
-	
+
 	/**
-	 * posts a new medical record
+	 * Posts a new medical record
 	 * 
-	 * @param medicalRecord medical record to add to the list
-	 * @return List<MedicalRecord> the final medical records list with the medical record added
-	 * @throws IOException
+	 * @param medicalRecord : MedicalRecord to add to the medical records list
+	 * @return medical records list with the new medical record saved
 	 */
 	@PostMapping("/medicalRecord")
-	public List<MedicalRecord> saveMedicalRecord(@RequestBody MedicalRecord medicalRecord) throws IOException{
+	public List<MedicalRecord> saveMedicalRecord(@RequestBody MedicalRecord medicalRecord) {
 		List<MedicalRecord> medicalRecordsList = new ArrayList<>();
 		medicalRecordsList = service.getMedicalRecords();
 		medicalRecordsList = service.saveMedicalRecord(medicalRecordsList, medicalRecord);
@@ -54,16 +52,15 @@ public class MedicalRecordApiController {
 		log.info("Response for the POST request for medicalRecord: " + medicalRecordsList);
 		return medicalRecordsList;
 	}
-	
+
 	/**
-	 * updates data for a medical record
+	 * Updates data for a medical record
 	 * 
-	 * @param medicalRecord medical record with new data
-	 * @return List<MedicalRecord> the medical records list with the medical record updated
-	 * @throws IOException
+	 * @param medicalRecord : MedicalRecord to update in the medical records
+	 * @return medical records list with updated medical record
 	 */
 	@PutMapping("/medicalRecord")
-	public List<MedicalRecord> updateMedicalRecord(@RequestBody MedicalRecord medicalRecord) throws IOException{
+	public List<MedicalRecord> updateMedicalRecord(@RequestBody MedicalRecord medicalRecord) {
 		List<MedicalRecord> medicalRecordsList = new ArrayList<>();
 		medicalRecordsList = service.getMedicalRecords();
 		medicalRecordsList = service.updateMedicalRecord(medicalRecordsList, medicalRecord);
@@ -71,16 +68,15 @@ public class MedicalRecordApiController {
 		log.info("Response for the PUT request for medicalRecord: " + medicalRecordsList);
 		return medicalRecordsList;
 	}
-	
+
 	/**
-	 * deletes a medical record
+	 * Deletes a medical record
 	 * 
-	 * @param medicalRecord medical record to delete
-	 * @return List<MedicalRecord> the final list without the medical record deleted
-	 * @throws IOException
+	 * @param medicalRecord : MedicalRecord to delete from the medical records list
+	 * @return medical records list without the deleted medical record
 	 */
 	@DeleteMapping("/medicalRecord")
-	public List<MedicalRecord> deleteMedicalRecord(@RequestBody MedicalRecord medicalRecord) throws IOException{
+	public List<MedicalRecord> deleteMedicalRecord(@RequestBody MedicalRecord medicalRecord) {
 		List<MedicalRecord> medicalRecordsList = new ArrayList<>();
 		medicalRecordsList = service.getMedicalRecords();
 		medicalRecordsList = service.deleteMedicalRecord(medicalRecordsList, medicalRecord);
@@ -89,5 +85,4 @@ public class MedicalRecordApiController {
 		return medicalRecordsList;
 	}
 
-	
 }
