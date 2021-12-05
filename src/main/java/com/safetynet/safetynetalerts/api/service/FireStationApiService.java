@@ -1,6 +1,5 @@
 package com.safetynet.safetynetalerts.api.service;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -32,9 +31,8 @@ public class FireStationApiService {
 	 * Retrieves fire stations data from FireStationApiRepository
 	 * 
 	 * @return List of FireStation retrieved from data
-	 * @throws IOException
 	 */
-	public List<FireStation> getFireStations() throws IOException {
+	public List<FireStation> getFireStations() {
 		return repository.getFireStationsDatas();
 	}
 
@@ -140,9 +138,8 @@ public class FireStationApiService {
 	 * 
 	 * @param stationNumber : the number of the fire station (String)
 	 * @return a phone numbers list
-	 * @throws IOException
 	 */
-	public List<String> getPhoneNumbers(String stationNumber) throws IOException {
+	public List<String> getPhoneNumbers(String stationNumber) {
 		List<FireStation> fireStationsList = new ArrayList<>();
 		fireStationsList = getFireStations();
 		List<Person> personsList = new ArrayList<>();
@@ -166,9 +163,8 @@ public class FireStationApiService {
 	 * @param stationNumber : number of the fire station
 	 * @return a Map of persons with first and last name, address, phone and the
 	 *         count of children and adults
-	 * @throws IOException
 	 */
-	public List<Map<String, String>> getPersonsForFireStation(String stationNumber) throws IOException {
+	public List<Map<String, String>> getPersonsForFireStation(String stationNumber) {
 		List<Map<String, String>> persons = new ArrayList<>();
 		List<FireStation> fireStationsList = new ArrayList<>();
 		fireStationsList = getFireStations();
@@ -211,9 +207,8 @@ public class FireStationApiService {
 	 * @param address : address for the list of persons (String)
 	 * @return a list of persons with first and last names, phone, age, medications,
 	 *         allergies and fire station number
-	 * @throws IOException
 	 */
-	public List<Map<String, String>> getPersonsDataForAnaddressWithStationNumber(String address) throws IOException {
+	public List<Map<String, String>> getPersonsDataForAnaddressWithStationNumber(String address) {
 		List<Map<String, String>> persons = new ArrayList<>();
 		List<FireStation> fireStationsList = new ArrayList<>();
 		fireStationsList = getFireStations();
@@ -239,9 +234,8 @@ public class FireStationApiService {
 	 * @param stationsList : list fire stations for the list of persons
 	 * @return a list of person with first and last names, phone, age, medications,
 	 *         allergies
-	 * @throws IOException 
 	 */
-	public List<Map<String, String>> getPersonsDataForFireStationList(List<String> stationsList) throws IOException{
+	public List<Map<String, String>> getPersonsDataForFireStationList(List<String> stationsList){
 		List<Map<String, String>> persons = new ArrayList<>();
 		List<FireStation> fireStationsList = repository.getFireStationsDatas();
 		List<String> addresses = new ArrayList<>();
@@ -269,9 +263,8 @@ public class FireStationApiService {
 	 * @param address : address for the list of persons (String)
 	 * @return a list of persons with first and last names, phone, age, medications,
 	 *         allergies
-	 * @throws IOException
 	 */
-	public List<Map<String, String>> getPersonsDataForAnaddress(String address) throws IOException {
+	public List<Map<String, String>> getPersonsDataForAnaddress(String address) {
 		List<Map<String, String>> persons = new ArrayList<>();
 		List<MedicalRecord> medicalRecordsList = new ArrayList<>();
 		medicalRecordsList = medicalRecordRepository.getMedicalRecordsDatas();

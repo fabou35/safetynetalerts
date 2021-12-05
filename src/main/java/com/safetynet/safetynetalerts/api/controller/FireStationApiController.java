@@ -1,10 +1,6 @@
 package com.safetynet.safetynetalerts.api.controller;
 
-import java.io.IOException;
-
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,10 +29,9 @@ public class FireStationApiController {
 	 * Gets the ordered fire stations list
 	 * 
 	 * @return List of ordered FireStation
-	 * @throws IOException
 	 */
 	/*@GetMapping("/firestation")
-	public List<FireStation> getFireStations(@RequestParam ("stationNumber") String stationNumber) throws IOException {
+	public List<FireStation> getFireStations(@RequestParam ("stationNumber") String stationNumber) {
 		List<FireStation> fireStationsList = new ArrayList<>();
 		fireStationsList = service.getFireStations();
 		fireStationsList = service.getFireStationsAddressesInSet(fireStationsList);
@@ -51,10 +46,9 @@ public class FireStationApiController {
 	 * 
 	 * @param newFireStation : FireStation to add to the fire stations list
 	 * @return fire stations list with new fire station
-	 * @throws IOException
 	 */
 	@PostMapping("/firestation")
-	public List<FireStation> saveFireStation(@RequestBody FireStation newFireStation) throws IOException {
+	public List<FireStation> saveFireStation(@RequestBody FireStation newFireStation) {
 		List<FireStation> fireStationsList = new ArrayList<>();
 		fireStationsList = service.getFireStations();
 		fireStationsList = service.saveFireStation(fireStationsList, newFireStation);
@@ -69,10 +63,9 @@ public class FireStationApiController {
 	 * 
 	 * @param fireStationToUpdate FireStation to update in the fire stations list
 	 * @return List<FireStation> fire stations list with a fire station updated
-	 * @throws IOException
 	 */
 	@PutMapping("/firestation")
-	public List<FireStation> updateFireStationNumber(@RequestBody FireStation fireStationToUpdate) throws IOException {
+	public List<FireStation> updateFireStationNumber(@RequestBody FireStation fireStationToUpdate) {
 		List<FireStation> fireStationsList = new ArrayList<>();
 		fireStationsList = service.getFireStations();
 		fireStationsList = service.updateFireStationNumber(fireStationsList, fireStationToUpdate);
@@ -87,10 +80,9 @@ public class FireStationApiController {
 	 * 
 	 * @param mappingToDelete : stationNumber or address to delete (String)
 	 * @return fire stations list without the deleted mapping
-	 * @throws IOException
 	 */
 	@DeleteMapping("/firestation")
-	public List<FireStation> deleteFireStation(@RequestBody FireStation fireStationToDelete) throws IOException {
+	public List<FireStation> deleteFireStation(@RequestBody FireStation fireStationToDelete) {
 		List<FireStation> fireStationsList = new ArrayList<>();
 		fireStationsList = service.getFireStations();
 		fireStationsList = service.deleteFireStation(fireStationsList, fireStationToDelete);
@@ -107,10 +99,9 @@ public class FireStationApiController {
 	 * 
 	 * @param stationNumber : the number of the fire station (String)
 	 * @return a phone numbers list
-	 * @throws IOException
 	 */
 	@GetMapping("/phoneAlert")
-	public List<String> getPhoneNumbers(@RequestParam ("firestation") String stationNumber) throws IOException{
+	public List<String> getPhoneNumbers(@RequestParam ("firestation") String stationNumber) {
 		List<String> phoneNumbersList = new ArrayList<>();
 		phoneNumbersList = service.getPhoneNumbers(stationNumber);
 		return phoneNumbersList;
@@ -122,10 +113,9 @@ public class FireStationApiController {
 	 * @param stationNumber : number of the fire station
 	 * @return a Map of persons with first and last name, address, phone and the
 	 *         count of children and adults
-	 * @throws IOException
 	 */
 	@GetMapping("/firestation")
-	public List<Map<String, String>> getPersonsForFireStation(@RequestParam("stationNumber") String stationNumber) throws IOException{
+	public List<Map<String, String>> getPersonsForFireStation(@RequestParam("stationNumber") String stationNumber) {
 		List<Map<String, String>> personsList = new ArrayList<>();
 		personsList = service.getPersonsForFireStation(stationNumber);
 		return personsList;
@@ -138,10 +128,9 @@ public class FireStationApiController {
 	 * @param address : address for the list of persons (String)
 	 * @return a list of persons with first and last names, phone, age, medications,
 	 *         allergies and fire station number
-	 * @throws IOException 
 	 */
 	@GetMapping("/fire")
-	public List<Map<String, String>> getPersonsDataForAnaddress(@RequestParam("address") String address) throws IOException{
+	public List<Map<String, String>> getPersonsDataForAnaddress(@RequestParam("address") String address) {
 		List<Map<String, String>> personsList = new ArrayList<>();
 		personsList = service.getPersonsDataForAnaddressWithStationNumber(address);
 		return personsList;
@@ -154,10 +143,9 @@ public class FireStationApiController {
 	  * @param stationsList : list fire stations for the list of persons
 	 * @return a list of person with first and last names, phone, age, medications,
 	 *         allergies
-	 * @throws IOException 
 	 */
 	@GetMapping("/flood/stations")
-	public List<Map<String, String>> getPersonsDataForFireStationList(@RequestParam("stations") List<String> stationsList) throws IOException{
+	public List<Map<String, String>> getPersonsDataForFireStationList(@RequestParam("stations") List<String> stationsList) {
 		List<Map<String, String>> personsList = new ArrayList<>();
 		personsList = service.getPersonsDataForFireStationList(stationsList);
 		return personsList;
